@@ -14,40 +14,40 @@ sudo apt install lxc lxc-templates lxd -y</pre>
 Créer des containers pour Minetest : Pour chaque monde (par exemple, survie, créatif, exploration), crée un container LXC dédié.
 Par exemple, pour créer un container pour Minetest Survie :
 
-sudo lxc-create -n luanti-survie -t debian
+<pre>sudo lxc-create -n luanti-survie -t debian</pre>
 
 
 Si tu veux ajouter d'autres mondes comme créatif, exploration, bedwars, répète la commande pour chaque monde :
 
-sudo lxc-create -n luanti-creatif -t debian
+<pre>sudo lxc-create -n luanti-creatif -t debian
 sudo lxc-create -n luanti-exploration -t debian
-sudo lxc-create -n luanti-bedwars -t debian
+sudo lxc-create -n luanti-bedwars -t debian</pre>
 
 🚀 Étape 2 : Installer Minetest dans les containers
 
 Démarrer les containers : Une fois que les containers sont créés, démarre-les avec :
 
-sudo lxc-start -n luanti-survie
+<pre>sudo lxc-start -n luanti-survie
 sudo lxc-start -n luanti-creatif
 sudo lxc-start -n luanti-exploration
-sudo lxc-start -n luanti-bedwars
+sudo lxc-start -n luanti-bedwars</pre>
 
 
 Vérifie leur état avec :
 
-sudo lxc-ls -f
+<pre>sudo lxc-ls -f</pre>
 
 
 Installer Minetest dans chaque container :
-Connecte-toi à un container via lxc-attach, puis installe Minetest à l'intérieur du container :
+Connecte-toi à un container via <pre>lxc-attach</pre>, puis installe Minetest à l'intérieur du container :
 
-sudo lxc-attach -n luanti-survie
+<pre>sudo lxc-attach -n luanti-survie</pre>
 
 
 Une fois dans le container, installe Minetest :
 
-sudo apt update
-sudo apt install minetest-server -y
+<pre>sudo apt update
+sudo apt install minetest-server -y</pre>
 
 
 Répète cette commande pour chaque container.
@@ -55,11 +55,11 @@ Répète cette commande pour chaque container.
 🚀 Étape 3 : Configurer Minetest pour chaque monde
 
 Configurer le serveur Minetest dans chaque container :
-Une fois Minetest installé, configure chaque monde dans /etc/minetest/minetest.conf ou le fichier de configuration global dans /var/lib/luanti/default.conf.
+Une fois Minetest installé, configure chaque monde dans <pre>/etc/minetest/minetest.conf</pre> ou le fichier de configuration global dans <pre>/var/lib/luanti/default.conf</pre>
 
 Par exemple, pour un monde survie, tu peux configurer le fichier minetest.conf de cette manière :
 
-server_name = Serveur Survie
+<pre>server_name = Serveur Survie
 port = 30000
 bind_address = 0.0.0.0
 world = /var/lib/minetest/worlds/survie
@@ -67,7 +67,7 @@ max_users = 20
 enable_damage = true
 enable_pvp = true
 creative_mode = false
-default_privs = interact, shout
+default_privs = interact, shout</pre>
 
 
 Cela configure le monde survie pour ton serveur Minetest.
@@ -75,7 +75,7 @@ Cela configure le monde survie pour ton serveur Minetest.
 Créer et ajouter un monde :
 Crée un dossier pour ton monde dans le répertoire worlds/ de Minetest :
 
-mkdir /var/lib/minetest/worlds/survie
+<pre>mkdir /var/lib/minetest/worlds/survie</pre>
 
 
 Tu peux aussi ajouter une map déjà existante ou la générer en utilisant la commande de Minetest. Assure-toi que le monde contient les fichiers nécessaires, comme world.mt, map.sqlite, etc.
@@ -84,13 +84,13 @@ Tu peux aussi ajouter une map déjà existante ou la générer en utilisant la c
 
 Redémarrer le service Minetest pour appliquer les nouvelles configurations :
 
-sudo systemctl restart minetest-server
+<pre>sudo systemctl restart minetest-server</pre>
 
 
 Vérifier que le serveur démarre bien :
 Regarde les logs de Minetest dans les fichiers de log (souvent dans /var/log/ ou un répertoire similaire) pour t'assurer qu’il n’y a pas d’erreurs. Utilise :
 
-tail -f /var/log/luanti/minetest.log
+<pre>tail -f /var/log/luanti/minetest.log</pre>
 
 
 Tester la connexion au serveur Minetest depuis ton client :
@@ -101,7 +101,7 @@ Ouvre Minetest sur ton client et connecte-toi à ton serveur via l'IP de la VM e
 Maintenant que tout est configuré, voici un script simple StartService.sh pour démarrer tous tes serveurs (ou un seul) automatiquement.
 
 📄 Script StartService.sh
-#!/bin/bash
+<pre>#!/bin/bash
 
 # ==========================
 # SCRIPT : StartService.sh
@@ -152,24 +152,26 @@ fi
 # Cas invalide
 echo "❌ Réponse inconnue. Utilise : o / n."
 exit 1
-
+</pre>
 📌 Pour utiliser le script
 
 Crée un fichier StartService.sh :
 
-nano StartService.sh
+<pre>nano StartService.sh</pre>
 
 
 Colle le contenu ci-dessus dans le fichier.
 
 Rends le script exécutable :
 
-chmod +x StartService.sh
+<pre>chmod +x StartService.sh</pre>
 
 
 Exécute-le :
 
-./StartService.sh
+<pre>./StartService.sh</pre>
 
+Puis sur une machine cliente suivre le guide d'installation de luanti disponible sur le site 
+https://www.luanti.org/en/downloads/
 
 Le script te demandera si tu veux démarrer tous les serveurs ou un seul, et il redémarrera le serveur Minetest dans le container approprié.
